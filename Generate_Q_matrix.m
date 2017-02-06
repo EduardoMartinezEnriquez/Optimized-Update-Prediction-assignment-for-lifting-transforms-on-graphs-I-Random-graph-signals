@@ -1,4 +1,7 @@
 function [Q] = Generate_Q_matrix(W)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function generates the Q matrix from the adjacency matrix W
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 NoOfSensors=length(W);
 Q=0*W;
