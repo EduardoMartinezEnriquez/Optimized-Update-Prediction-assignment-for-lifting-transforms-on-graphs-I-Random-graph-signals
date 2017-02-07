@@ -1,7 +1,7 @@
 Optimized Update/Prediction Assignment for Lifting Transforms on Graphs
 ========
 This is the source code related with the paper "Optimized Update/Prediction Assignment for Lifting Transforms on Graphs", 
-Eduardo Martínez-Enríquez, Jesús Cid-Sueiro, Fenrando Díaz-de-María and Antonio Ortega.
+Eduardo MartÃ­nez-EnrÃ­quez, JesÃºs Cid-Sueiro, Fernando DÃ­az-de-MarÃ­a and Antonio Ortega.
 ========
 RANDOMLY GENERATED GRAPH SIGNALS
 
