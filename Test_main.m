@@ -1,7 +1,40 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This script generates a random graph and random signal living on this graph
+% and obtains the mean prediction error (detail coefficient energy) when
+% three different Update/Prediction solutions are used, namely: MAM
+% solution (proposed), WMC solution and random assignment. The script also
+% calculates de mean degree and standard deviation of each solution.
+%     
+%     GSP toolbox is used in this script. GSP is a Free software, released under 
+%     the GNU General Public License (GPLv3). Please, download the GSPBox for Windows at 
+%     https://lts2.epfl.ch/gsp/ and type >>gsp_install from matlab to be able to run this script
+%
+% References: "Optimized Update/Prediction Assignment for
+% Lifting Transforms on Graphs", Eduardo Martinez-Enriquez, Jesus Cid-Sueiro, 
+% Fernando Diaz-de-Maria, and Antonio Ortega
+%
+% Author:
+%  - Eduardo Martinez-Enriquez <emenriquez@tsc.uc3m.es>
+% 
+%     Copyright (C)  2017 Eduardo Martínez-Enríquez.
+% 
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 close all
 clear all
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -9,7 +42,7 @@ clear all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % NUMBER OF NODES OF THE GRAPH
-N=200;
+N=100;
 %Choose the following value when working with Minnesota road graph
 % N=2642;
 
@@ -23,7 +56,7 @@ var_et=100;
 c=100;
 
 % NUMBER OF ITERATIONS (REALIZATIONS OF THE RANDOM GRAPH GENERATION)
-num_it=2;
+num_it=3;
 
 % MAXIMUM PERCENTAGE OF |U| NEIGHBORS ALLOWED.
 restriction=0.7;
@@ -52,7 +85,12 @@ for it=1:num_it
 %   SELECT THE GRAPH TOPOLOGY
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SELECT ONE OF THE FOLLOWING OPTIONS  TO GENERATE THE GRAPH (DECOMMENT THE
-% CHOSEN OPTION), UDING THE GSP TOOLBOX
+% CHOSEN OPTION), USING THE GSP TOOLBOX:
+%     GSP The toolbox is used in this script. GSP is a Free software, released under 
+%     the GNU General Public License (GPLv3). Please, download the GSPBox for Windows at 
+%     https://lts2.epfl.ch/gsp/ and type >>gsp_install from matlab to be able to run this script
+
+
 
 % Random Sensor Network; w=exp(-dist^2/med_dist^2)
 G=gsp_sensor(N); 
@@ -80,11 +118,10 @@ W=G.W;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GRAPH REPRESENTATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% DECOMMENT TO OBTAIN A GRAPH REPRESENATION OF THE GRAPH SIGNAL.
+% DECOMMENT TO OBTAIN A GRAPH REPRESENTATION OF THE GRAPH SIGNAL.
 param.bar=0;
 % % % % % param.bar=1;
 gsp_plot_signal(G,x,param);
-
 
 
 
@@ -124,7 +161,10 @@ figure, plot(prop_ev_acum,sqrt(D0_acum));
 hold on
 plot(prop_ev_acum_RAN,sqrt(D0_acum_RAN),'y')
 plot(prop_ev_acum_MC,sqrt(D0_acum_MC),'r')
-close all
+xlabel('|U|/N')
+ylabel('E_{rms}')
+legend('Proposed','Random','WMC')
+
 
 figure
 plot(prop_ev_acum,mean_Degree_acum,'b')
@@ -134,6 +174,9 @@ hold on
 plot(prop_ev_acum_MC,mean_Degree_acumMC,'r')
 hold on
 plot(prop_ev_acum_MC,dev_Degree_acumMC,'.r')
+xlabel('|U|/N')
+ylabel('Degree')
+legend('\mu_{degree} Proposed','\sigma_{degree} Proposed','\mu_{degree} WMC','\sigma_{degree} WMC')
 close all
 
 
@@ -204,6 +247,9 @@ plot(prom_prop_ev_RAN, sqrt(prom_RAN),'y')
 hold on
 plot( prom_prop_ev_MC, sqrt(prom_MC), 'r')
 plot( prom_prop_ev_MAM, sqrt(prom_MAM), 'b')
+xlabel('|U|/N')
+ylabel('E_{rms}')
+legend('Random','WMC','Proposed')
 
 figure
 plot(prom_prop_ev_MC, prom_MC_Deg,'r')
@@ -211,6 +257,9 @@ hold on
 plot( prom_prop_ev_MC, prom_MC_dev_Deg, 'r.')
 plot( prom_prop_ev_MAM, prom_MAM_Deg, 'b')
 plot( prom_prop_ev_MAM, prom_MAM_dev_Deg, '.b')
+xlabel('|U|/N')
+ylabel('Degree')
+legend('\mu_{degree} WMC','\sigma_{degree} WMC','\mu_{degree} Proposed','\sigma_{degree} Proposed')
 
 
 
