@@ -42,7 +42,7 @@ clear all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % NUMBER OF NODES OF THE GRAPH
-N=100;
+N=500;
 %Choose the following value when working with Minnesota road graph
 % N=2642;
 
@@ -76,6 +76,8 @@ mean_Degree_acum_MC_matrix=zeros(num_it,N);
 mean_Degree_acum_MAM_matrix=zeros(num_it,N);
 dev_Degree_acum_MC_matrix=zeros(num_it,N);
 dev_Degree_acum_MAM_matrix=zeros(num_it,N);
+time_MAM=zeros(num_it,1);
+time_WMC=zeros(num_it,1);
 
 
 % LOOP NUMBER OF ITERATIONS (REALIZATIONS OF THE RANDOM GRAPH GENERATION)
@@ -99,8 +101,8 @@ G=gsp_sensor(N);
 % G=gsp_community(N);
 
 % Minnesota graph
-% % % connect=1;
-% % % G=gsp_minnesota(connect); 
+% connect=1;
+% G=gsp_minnesota(connect); 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -134,6 +136,23 @@ tic
 a=toc
 
 time_per_node=a/length(U_set)
+time_MAM(it)=time_per_node;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GREEDY EXHAUSTIVE ALGORITHM FOR THE PROPOSED (MAM) UPA SOLUTION 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Decomment to measure time when using a greedy exhaustive algorithm. The 
+% energy results are the same than using greedy_MAM, but the algorithm is
+% much slower
+
+% % % % % label=ones(N,1); % WE START WITH EVERY NODE AS P NODE
+% % % % % tic
+% % % % % [U_set P_set D0_acum  prop_ev_acum mean_Degree_acum dev_Degree_acum]  = greedy_MAM_exhaustive(Q, var_ep,var_et,nu_et,label,W,c,x,restriction);
+% % % % % a=toc
+% % % % % 
+% % % % % time_per_node=a/length(U_set)
+% % % % % time_MAM(it)=time_per_node;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,13 +163,12 @@ tic
 [label_MC D0_acum_MC prop_ev_acum_MC media_acum_MC desv_acum_MC media_MAXCUT desv_MAXCUT D0_MAXCUT RMS_MAXCUT U_set_MC mean_Degree_acumMC dev_Degree_acumMC] = greedy_MAXCUT(W, x);
 a=toc
 time_per_node_MC=a/length(U_set_MC)
-
+time_WMC(it)=time_per_node_MC;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GREEDY ALGORITHM FOR THE RANDOM UPA SOLUTION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [label_RAN D0_acum_RAN prop_ev_acum_RAN media_acum_RAN desv_acum_RAN] = greedy_Random_Assignment(W,  x,restriction);
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
