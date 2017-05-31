@@ -1,4 +1,4 @@
-function [media desv D0 mean_Degree dev_Degree]=calculate_energy_and_degree (A_fin, label, datastore,P)
+function [media desv D0 mean_Degree dev_Degree coeffs Vecinos_Evens]=calculate_energy_and_degree (A_fin, label, datastore,P)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function calculates the error in the average prediction error and degree

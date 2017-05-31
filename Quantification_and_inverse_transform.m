@@ -1,6 +1,8 @@
-function [P_filters] = obtain_P_filters(A_odds)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This function obtains the P matrix with the prediction filters in matrix form. 
+function [x_r] = Quantification_and_inverse_transform(coeffs,P_set,Vecinos_Evens,W,label)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function sets the P coefficients to zero and calculates the inverse
+% lifting transform
 %
 % References: "Optimized Update/Prediction Assignment for
 % Lifting Transforms on Graphs", Eduardo Martinez-Enriquez, Jesus Cid-Sueiro, 
@@ -23,13 +25,20 @@ function [P_filters] = obtain_P_filters(A_odds)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-warning('off')
-C=sum(A_odds,2);
-D=C==0;
-G=C+D;
-F=diag(G)\A_odds;
-P_filters=F;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%
+% QUANTIFICATION
+%%%%%%%%%%%%%%%%%%%%%%
+coeffs(P_set)=0;
+coeffs_umb=coeffs;
+
+%%%%%%%%%%%%%%%%%%%%%%
+% INVERSE TRANSFORM
+%%%%%%%%%%%%%%%%%%%%%%
+x_r = InverseTransform(coeffs_umb,Vecinos_Evens, W, label);
+
+
 
 end
 

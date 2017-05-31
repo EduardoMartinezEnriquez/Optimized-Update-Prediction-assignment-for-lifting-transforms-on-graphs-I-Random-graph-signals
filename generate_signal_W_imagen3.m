@@ -1,6 +1,6 @@
-function [P_filters] = obtain_P_filters(A_odds)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This function obtains the P matrix with the prediction filters in matrix form. 
+function [W,data]=generate_signal_W_imagen3(N_aux, imagen_aux) 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function generates the weighted adjacency matrix
 %
 % References: "Optimized Update/Prediction Assignment for
 % Lifting Transforms on Graphs", Eduardo Martinez-Enriquez, Jesus Cid-Sueiro, 
@@ -24,12 +24,38 @@ function [P_filters] = obtain_P_filters(A_odds)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-warning('off')
-C=sum(A_odds,2);
-D=C==0;
-G=C+D;
-F=diag(G)\A_odds;
-P_filters=F;
 
+% Example; 8 connected (also 4 connected)
+% square images of size N_aux X N_aux
+N=N_aux;
+M=N_aux;
+
+figure, imshow(imagen_aux,[0 256])
+
+[ii jj] = sparse_adj_matrix([N M], 1, inf);
+[r c]=ndgrid(1:N,1:M);
+A = sparse(ii, jj, ones(1,numel(ii)), N*M, N*M);
+
+W=A;
+
+B_aux=imagen_aux';
+data=B_aux(:);
+data=double(data);
+
+%NORMALIZATION FACTOR CALCULATION
+vect_estimation=[];
+
+for i=1:length(data) 
+    aux=find(A(i,:)~=0);
+    vect_estimation=[vect_estimation;data(aux)-data(i)];
 end
+sigma=std(vect_estimation);
 
+
+for i=1:length(data) 
+    aux=find(A(i,:)~=0);
+    W(i,aux)=exp(-(abs(data(aux)-data(i))).^2./(2*sigma^2));
+    
+    % remove auto-loops
+    W(i,i)=0;
+end

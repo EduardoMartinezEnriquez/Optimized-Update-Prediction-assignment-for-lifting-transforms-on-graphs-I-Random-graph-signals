@@ -1,6 +1,7 @@
-function [P_filters] = obtain_P_filters(A_odds)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This function obtains the P matrix with the prediction filters in matrix form. 
+function x_r = InverseTransform(coeffs_umb,Vecinos_Evens, A_fin, label);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function performs the inverse lifting transform
 %
 % References: "Optimized Update/Prediction Assignment for
 % Lifting Transforms on Graphs", Eduardo Martinez-Enriquez, Jesus Cid-Sueiro, 
@@ -23,13 +24,28 @@ function [P_filters] = obtain_P_filters(A_odds)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-warning('off')
-C=sum(A_odds,2);
-D=C==0;
-G=C+D;
-F=diag(G)\A_odds;
-P_filters=F;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+x_r =coeffs_umb;
+
+NoOfSensors=length(A_fin);
+
+for n=1:NoOfSensors
+    if label(n) == 1  % n is a P node            
+            Nn = Vecinos_Evens{n};
+            if ~isempty(Nn)
+
+
+                   [p_n Degree]=Prediction_filters_and_Degree(A_fin, Nn, n, NoOfSensors);
+                   
+                    x_N = x_r(Nn);
+
+                    x_hat(n) = p_n(Nn)'*x_N;
+           
+                    x_r(n) = round(x_r(n) + x_hat(n));
+
+            end
+
+        
+     end
 end
-
